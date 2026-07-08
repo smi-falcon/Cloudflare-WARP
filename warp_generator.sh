@@ -44,6 +44,8 @@ conf=$(cat <<-EOM
 PrivateKey = ${priv}
 S1 = 0
 S2 = 0
+S3 = 0
+S4 = 0
 Jc = 120
 Jmin = 23
 Jmax = 911
@@ -72,7 +74,7 @@ AWG_JSON=$(jq -n \
     --arg cf "$conf" \
     '{
         H1: "1", H2: "2", H3: "3", H4: "4",
-        I1: $i1, Jc: "120", Jmax: "911", Jmin: "23", S1: "0", S2: "0",
+        I1: $i1, Jc: "120", Jmax: "911", Jmin: "23", S1: "0", S2: "0", S3: "0", S4: "0",
         allowed_ips: ["0.0.0.0/0", "::/0"],
         client_ip: ($v4 + ", " + $v6),
         client_priv_key: $pr,
