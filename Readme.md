@@ -10,18 +10,18 @@
 4. Terminal
 5. Вставляем команду (Shift + Insert):
 ```bash
-bash <(wget --inet4-only -qO- https://raw.githubusercontent.com/ImMALWARE/bash-warp-generator/main/warp_generator.sh)
+bash <(wget --inet4-only -qO- https://raw.githubusercontent.com/smi-falcon/Cloudflare-WARP/main/warp_generator.sh)
 ```
 6. После того, как конфиг сгенерируется, копируем его, либо скачиваем файлом по ссылке и импортируем в AmneziaVPN!👍
 
 ## Вариант 2: Replit
-1. Тыкаем сюда: [![Run on Repl.it](https://repl.it/badge/github/replit/upm)](https://replit.com/new/github/ImMALWARE/bash-warp-generator)
+1. Тыкаем сюда: [![Run on Repl.it](https://repl.it/badge/github/replit/upm)](https://replit.com/new/github/smi-falcon/Cloudflare-WARP)
 2. Создаём аккаунт
 3. Нажимаем кнопку **`Run`** вверху
 4. После того, как конфиг сгенерируется, копируем его, либо скачиваем файлом по ссылке и импортируем в AmneziaVPN!👍
 
 ## Вариант 3: GitHub Codespaces
-1. Переходим по ссылке: https://github.com/ImMALWARE/bash-warp-generator/codespaces
+1. Переходим по ссылке: https://github.com/smi-falcon/Cloudflare-WARP/codespaces
 2. Вводим учётные данные GitHub (потребуется авторизация, если вы не вошли в аккаунт)
 3. Нажимаем **`Create codespace on main`**
 4. Дожидаемся, пока среда загрузится (может занять 10–30 секунд)
@@ -31,7 +31,7 @@ bash warp_generator.sh
 ```
 6. После того, как конфиг сгенерируется, копируем его, либо скачиваем файлом по ссылке и импортируем в AmneziaVPN!👍
 7. После завершения можно **удалить codespace**:  
-   - Переходим в https://github.com/ImMALWARE/bash-warp-generator/codespaces
+   - Переходим в https://github.com/smi-falcon/Cloudflare-WARP/codespaces
    - Нажимаем на три точки → **Delete**  
    *GitHub удаляет Codespaces автоматически через некоторое время бездействия, но лучше удалить сразу.*
 
