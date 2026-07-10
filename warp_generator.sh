@@ -65,6 +65,8 @@ Endpoint = 162.159.192.1:500
 EOM
 )
 
+I1_VAL=$(echo "${conf}" | grep '^I1 = ' | sed 's/^I1 = //')
+
 AWG_JSON=$(jq -n \
     --arg pr "$priv" \
     --arg i1 "$I1_VAL" \
