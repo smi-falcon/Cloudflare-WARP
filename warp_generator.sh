@@ -109,6 +109,15 @@ AMNEZIA_JSON=$(jq -n \
 
 VPN_KEY="vpn://$(echo -n "$AMNEZIA_JSON" | base64 -w 0)"
 
+if [ -t 1 ]; then
+    echo "########## QR-КОД ##########"
+fi
+echo "$conf" | qrencode -t UTF8
+if [ -t 1 ]; then
+    echo "########## КОНЕЦ QR-КОДА ##########"
+fi
+
+echo -e "\n\n\n"
 [ -t 1 ] && echo "########## СТРОКА ДЛЯ AMNEZIAVPN ##########"
 echo "$VPN_KEY"
 [ -t 1 ] && echo "########### КОНЕЦ СТРОКИ ДЛЯ AMNEZIAVPN ###########"
