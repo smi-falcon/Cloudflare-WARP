@@ -112,6 +112,20 @@ if ! [[ "$MTU_VALUE" =~ ^[0-9]+$ ]]; then
 fi
 
 echo ""
+echo "Выберите конечную точку:"
+echo "  1) 162.159.192.1:500"
+echo "  2) 162.159.195.1:500"
+echo "  3) engage.cloudflareclient.com:2408"
+read -p "Ваш выбор [1]: " ENDPOINT_CHOICE
+ENDPOINT_CHOICE="${ENDPOINT_CHOICE:-1}"
+
+case "$ENDPOINT_CHOICE" in
+    2) ENDPOINT_HOST="162.159.195.1"; ENDPOINT_PORT="500" ;;
+    3) ENDPOINT_HOST="engage.cloudflareclient.com"; ENDPOINT_PORT="2408" ;;
+    *) ENDPOINT_HOST="162.159.192.1"; ENDPOINT_PORT="500" ;;
+esac
+
+echo ""
 read -p "Включить IPv6 в конфигурации? (y/n) [y]: " ENABLE_IPV6
 ENABLE_IPV6="${ENABLE_IPV6:-y}"
 
@@ -217,7 +231,7 @@ MTU = ${MTU_VALUE}
 [Peer]
 PublicKey = ${peer_pub}
 AllowedIPs = ${ALLOWED_IPS}
-Endpoint = 162.159.192.1:500
+Endpoint = ${ENDPOINT_HOST}:${ENDPOINT_PORT}
 ${KEEPALIVE_LINE}
 EOM
 )
@@ -236,6 +250,8 @@ AWG_JSON=$(jq -n \
     --arg jc "$JC" \
     --arg jmin "$JMIN" \
     --arg jmax "$JMAX" \
+    --arg endpoint_host "$ENDPOINT_HOST" \
+    --arg endpoint_port "$ENDPOINT_PORT" \
     '{
         H1: "1", H2: "2", H3: "3", H4: "4",
         I1: $i1, Jc: $jc, Jmax: $jmax, Jmin: $jmin, S1: "0", S2: "0", S3: "0", S4: "0",
@@ -243,15 +259,16 @@ AWG_JSON=$(jq -n \
         client_ip: ($v4 + ", " + $v6),
         client_priv_key: $pr,
         config: ($cf | gsub("\n"; "\r\n")),
-        hostName: "162.159.192.1",
+        hostName: $endpoint_host,
         mtu: ($mtu | tonumber),
-        port: 500,
+        port: ($endpoint_port | tonumber),
         server_pub_key: $pp
     }')
 
 AMNEZIA_JSON=$(jq -n \
     --arg last "$AWG_JSON" \
     --arg name "Cloudflare WARP" \
+    --arg hostname "$ENDPOINT_HOST" \
     '{
         containers: [
             {
@@ -266,7 +283,7 @@ AMNEZIA_JSON=$(jq -n \
         ],
         defaultContainer: "amnezia-awg",
         description: $name,
-        hostName: "162.159.192.1"
+        hostName: $hostname
     }')
 
 VPN_KEY="vpn://$(echo -n "$AMNEZIA_JSON" | base64 -w 0)"
