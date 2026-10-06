@@ -77,6 +77,33 @@ else
 fi
 
 echo ""
+echo "Выберите параметры Jc / Jmin / Jmax:"
+echo "  1) Jc = 3,   Jmin = 10, Jmax = 30"
+echo "  2) Jc = 4,   Jmin = 40, Jmax = 70"
+echo "  3) Jc = 6,   Jmin = 70, Jmax = 100"
+echo "  4) Jc = 120, Jmin = 23, Jmax = 911"
+echo "  5) Ввести свои значения"
+read -p "Ваш выбор [1]: " JC_CHOICE
+JC_CHOICE="${JC_CHOICE:-1}"
+
+case "$JC_CHOICE" in
+    1) JC=3;   JMIN=10; JMAX=30;  ;;
+    2) JC=4;   JMIN=40; JMAX=70;  ;;
+    3) JC=6;   JMIN=70; JMAX=100; ;;
+    4) JC=120; JMIN=23; JMAX=911; ;;
+    5)
+        read -p "Jc [120]: "   JC;   JC="${JC:-120}"
+        read -p "Jmin [23]: "  JMIN; JMIN="${JMIN:-23}"
+        read -p "Jmax [911]: " JMAX; JMAX="${JMAX:-911}"
+        if ! [[ "$JC" =~ ^[0-9]+$ ]] || ! [[ "$JMIN" =~ ^[0-9]+$ ]] || ! [[ "$JMAX" =~ ^[0-9]+$ ]]; then
+            echo "[WARN] Некорректные значения — используем дефолт Jc=120, Jmin=23, Jmax=911"
+            JC=120; JMIN=23; JMAX=911
+        fi
+        ;;
+    *) JC=3; JMIN=10; JMAX=30 ;;
+esac
+
+echo ""
 read -p "Значение MTU [1280]: " MTU_VALUE
 MTU_VALUE="${MTU_VALUE:-1280}"
 if ! [[ "$MTU_VALUE" =~ ^[0-9]+$ ]]; then
@@ -171,9 +198,9 @@ fi
 conf=$(cat <<-EOM
 [Interface]
 PrivateKey = ${priv}
-Jc = 120
-Jmin = 23
-Jmax = 911
+Jc = ${JC}
+Jmin = ${JMIN}
+Jmax = ${JMAX}
 S1 = 0
 S2 = 0
 S3 = 0
@@ -206,9 +233,12 @@ AWG_JSON=$(jq -n \
     --arg cf "$conf" \
     --arg allowed_ips "$ALLOWED_IPS" \
     --arg mtu "$MTU_VALUE" \
+    --arg jc "$JC" \
+    --arg jmin "$JMIN" \
+    --arg jmax "$JMAX" \
     '{
         H1: "1", H2: "2", H3: "3", H4: "4",
-        I1: $i1, Jc: "120", Jmax: "911", Jmin: "23", S1: "0", S2: "0", S3: "0", S4: "0",
+        I1: $i1, Jc: $jc, Jmax: $jmax, Jmin: $jmin, S1: "0", S2: "0", S3: "0", S4: "0",
         allowed_ips: ($allowed_ips | split(", ") | map(select(length>0))),
         client_ip: ($v4 + ", " + $v6),
         client_priv_key: $pr,
