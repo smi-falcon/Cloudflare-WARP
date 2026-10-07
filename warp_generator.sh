@@ -16,6 +16,7 @@ else
     sudo apt-get update -y --fix-missing && sudo apt-get install wireguard-tools jq wget qrencode -y --fix-missing
 fi
 
+echo ""
 echo "Выберите DNS-сервер для конфигурации:"
 echo "  1) Cloudflare"
 echo "  2) Google"
@@ -116,12 +117,27 @@ echo "Выберите конечную точку:"
 echo "  1) 162.159.192.1:500"
 echo "  2) 162.159.195.1:500"
 echo "  3) engage.cloudflareclient.com:2408"
+echo "  4) Указать свой адрес"
 read -p "Ваш выбор [1]: " ENDPOINT_CHOICE
 ENDPOINT_CHOICE="${ENDPOINT_CHOICE:-1}"
 
 case "$ENDPOINT_CHOICE" in
     2) ENDPOINT_HOST="162.159.195.1"; ENDPOINT_PORT="500" ;;
     3) ENDPOINT_HOST="engage.cloudflareclient.com"; ENDPOINT_PORT="2408" ;;
+    4)
+        read -p "Введите адрес (host:port): " CUSTOM_ENDPOINT
+        if [ -n "$CUSTOM_ENDPOINT" ] && [[ "$CUSTOM_ENDPOINT" == *:* ]]; then
+            ENDPOINT_HOST="${CUSTOM_ENDPOINT%:*}"
+            ENDPOINT_PORT="${CUSTOM_ENDPOINT##*:}"
+            if ! [[ "$ENDPOINT_PORT" =~ ^[0-9]+$ ]]; then
+                echo "[WARN] Некорректный порт — используем 162.159.192.1:500"
+                ENDPOINT_HOST="162.159.192.1"; ENDPOINT_PORT="500"
+            fi
+        else
+            echo "[WARN] Некорректный адрес — используем 162.159.192.1:500"
+            ENDPOINT_HOST="162.159.192.1"; ENDPOINT_PORT="500"
+        fi
+        ;;
     *) ENDPOINT_HOST="162.159.192.1"; ENDPOINT_PORT="500" ;;
 esac
 
