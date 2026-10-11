@@ -25,6 +25,9 @@ echo "  4) AdGuard"
 echo "  5) Comss.one"
 echo "  6) XBoxDNS"
 echo "  7) GeoHide"
+echo "  8) Bezmezhau"
+echo "  9) DNS-AI"
+echo " 10) ZapretDNS"
 read -p "Ваш выбор [1]: " DNS_CHOICE
 DNS_CHOICE="${DNS_CHOICE:-1}"
 
@@ -50,8 +53,20 @@ case "$DNS_CHOICE" in
         DNS3="2a00:ab00:1233:26::50"; DNS4="2a00:ab00:1233:26::51"
         ;;
     7)
-        DNS1="217.60.245.219"; DNS2="217.60.245.233"
+        DNS1="5.175.161.3"; DNS2="5.175.161.40"
         DNS3=""; DNS4=""
+        ;;
+    8)
+        DNS1="143.20.64.55"; DNS2="31.58.216.201"
+        DNS3=""; DNS4=""
+        ;;
+    9)
+        DNS1="192.144.59.14"; DNS2="186.246.49.127"
+        DNS3="2a0d:8480:0:67c::14"; DNS4="2a0a:2b41:0:500d::53"
+        ;;
+    10)
+        DNS1="83.217.211.149"; DNS2=""
+        DNS3="2a03:afc0:9::235d"; DNS4=""
         ;;
     *)
         DNS1="1.1.1.1"; DNS2="1.0.0.1"
